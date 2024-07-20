@@ -22,16 +22,23 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # https://www.desmos.com/calculator/lvxrwjouzm
-    A = 1.6
-    f = 100
-    s = 1
-    m = -0.3
+    A, f, s, m = 1.6, 100, 1, -0.3
+    V = lambda t: (
+        A
+        * np.power(np.sin(f * t), 2)
+        * np.exp(-np.power(np.log(t) - m, 2) / (2 * s**2))
+        / (t * s * np.sqrt(2 * np.pi))
+    )
 
-    t = np.linspace(0.0001, 5, 10000)
-    v = A * np.power(np.sin(f * t), 2) * np.exp(-np.power(np.log(t) - m, 2) / (2 * s ** 2)) / (t * s * np.sqrt(2 * np.pi))
+    t = np.linspace(0.0001, 10, 20000)
+    t_first = np.linspace(0.0001, 5, 10000)
+
+    v_fin = np.concatenate([V(t_first), V(t_first)])
 
     if args.plot:
-        plt.plot(t,v)
+        plt.xlabel("t")
+        plt.ylabel("V")
+        plt.plot(t, v_fin)
         plt.show()
 
-    save_as_waveform_file(t, v, output_path=args.output_path)
+    save_as_waveform_file(t, v_fin, output_path=args.output_path)
