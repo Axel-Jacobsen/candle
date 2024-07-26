@@ -9,24 +9,24 @@ from typing import Optional
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument(
         "--output-path", type=Path, default=Path("./spice/waveforms/pwl_guess.txt")
     )
-    parser.add_argument("-N", type=int, default=10000)
-    parser.add_argument("-A", type=float, default=1.6)
-    parser.add_argument("-f", type=float, default=400.0)
-    parser.add_argument("-s", type=float, default=1.0)
-    parser.add_argument("-m", type=float, default=-0.3)
-    parser.add_argument("--noise-sigma", type=float, default=0.1)
-    parser.add_argument("--plot", action="store_true", default=False)
+    parser.add_argument("-N", type=int, default=10000, help="number of points in plot")
+    parser.add_argument("-A", type=float, default=1.6, help="amplitude of wave (before noise)")
+    parser.add_argument("-f", type=float, default=80.0, help="frequency of the wave")
+    parser.add_argument("-s", type=float, default=1.0, help="std. dev of the gaussians")
+    parser.add_argument("-m", type=float, default=-0.3, help="mean of the gaussians")
+    parser.add_argument("--noise", type=float, default=0.1, help="variance of the noise")
+    parser.add_argument("--plot", action="store_true", default=False, help="show the plot")
     args = parser.parse_args()
 
     # https://www.desmos.com/calculator/lvxrwjouzm
     V = lambda t: (
         args.A
-        * (np.random.randn(t.size) * args.noise_sigma + 1)
-        * np.power(np.sin(args.f * t), 2)
+        * (np.random.randn(t.size) * args.noise + 1)
+        * np.power(np.sin(2 * np.pi * args.f * t), 2)
         * np.exp(-np.power(np.log(t) - args.m, 2) / (2 * args.s**2))
         / (t * args.s * np.sqrt(2 * np.pi))
     )
