@@ -17,7 +17,7 @@ if __name__ == "__main__":
     parser.add_argument("-A", type=float, default=1.6, help="amplitude of wave (before noise)")
     parser.add_argument("-f", type=float, default=80.0, help="frequency of the wave")
     parser.add_argument("-s", type=float, default=1.0, help="std. dev of the gaussians")
-    parser.add_argument("-m", type=float, default=-0.3, help="mean of the gaussians")
+    parser.add_argument("-m", type=float, default=0.3, help="mean of the gaussians")
     parser.add_argument("--noise", type=float, default=0.1, help="variance of the noise")
     parser.add_argument("--plot", action="store_true", default=False, help="show the plot")
     args = parser.parse_args()
